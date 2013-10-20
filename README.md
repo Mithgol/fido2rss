@@ -1,4 +1,5 @@
-fido2rss
-========
+The **Fido2RSS** application makes RSS feeds out of Fidonet echomail areas.
 
-Makes RSS feeds out of Fidonet echomail.
+## License
+
+MIT License, see the `LICENSE` file.
