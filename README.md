@@ -38,7 +38,7 @@ where `[options]` is a space-separated list of the following options:
 
 *(optional)*
 
-The filename that is used to generate a lock file.
+The full path (with the filename) that is used to generate a lock file.
 
 You may use it to prevent both Fido2RSS and HPT (or any other echomail processor that supports lock files) from running simultaneously and trying to process the same echomail area.
 
@@ -56,7 +56,11 @@ The areatag (echotag) of the echomail area.
 
 ### --msg number
 
+*(optional)*
+
 How many latest messages are taken from the area and published to the RSS feed.
+
+By default, 23.
 
 ## Testing Fido2RSS
 
