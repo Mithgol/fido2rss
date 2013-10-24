@@ -2,6 +2,7 @@
 "dependencies": {
    "fidohtml": "~0.2.0",
    "fidonet-jam": "~1.0.1",
-   "rss": "~0.2.1"
+   "rss": "~0.2.1",
+   "simteconf": "~0.1.4"
 }
 }
