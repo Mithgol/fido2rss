@@ -52,6 +52,8 @@ How many latest messages are taken from the area and published to the RSS f
 
 ## Testing Fido2RSS
 
+[![(build testing status)](https://travis-ci.org/Mithgol/fido2rss.png?branch=master)](https://travis-ci.org/Mithgol/fido2rss)
+
 It is necessary to install [JSHint](http://jshint.com/) for testing.
 
 * You may install JSHint globally (`npm install jshint -g`) or locally (`npm install jshint` in the directory of Fido2RSS).
