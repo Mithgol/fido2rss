@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 var util = require('util');
 
 var opts = require('commander')

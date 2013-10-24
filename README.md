@@ -14,6 +14,8 @@ The **Fido2RSS** application makes RSS feeds out of Fidonet echomail areas.
 
 * Latest githubbed version: `npm install -g https://github.com/Mithgol/fido2rss/tarball/master`
 
+The application becomes installed globally and written in the `PATH`.
+
 You may visit https://github.com/Mithgol/fido2rss#readme occasionally to read the latest `README` because the package's version is not planned to grow after changes when they happen in `README` only. (However, `npm publish --force` may happen eventually.)
 
 ## Using Fido2RSS
