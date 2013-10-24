@@ -8,37 +8,45 @@ The **Fido2RSS** application makes RSS feeds out of Fidonet echomail areas.
 
 ## Installing Fido2RSS
 
-1. Make sure that Node.js and npm are installed on your system. (See the “[Installation](https://github.com/joyent/node/wiki/Installation)” article in the Node's wiki.)
+[![(npm package version)](https://badge.fury.io/js/fido2rss.png)](https://npmjs.org/package/fido2rss)
 
-2. Download the source code of Fido2RSS from GitHub and put it to a directory.
+* Latest packaged version: `npm install -g fido2rss`
 
-3. Run `npm install --production` in that directory.
+* Latest githubbed version: `npm install -g https://github.com/Mithgol/fido2rss/tarball/master`
 
-4. Edit the configuration in the `settings.cfg` file.
+You may visit https://github.com/Mithgol/fido2rss#readme occasionally to read the latest `README` because the package's version is not planned to grow after changes when they happen in `README` only. (However, `npm publish --force` may happen eventually.)
 
-## Updating Fido2RSS
+## Using Fido2RSS
 
-1. Make a backup copy of your `settings.cfg` file.
+You may run the installed application by typing in the command line:
 
-2. Download the newer source code of Fido2RSS from GitHub and replace the old source code.
+`fido2rss [options]`
 
-3. Run `npm install --production` in that directory.
+where `[options]` is a space-separated list of the following options:
 
-4. Replace the settings in the `settings.cfg` file with the settings from your backup copy of the file.
+### --lock path
 
-## Settings
+*(optional)*
 
-The file `settings.cfg` is a [simple text configuration file](https://github.com/Mithgol/simteconf#simple-text-configuration-files) where each line contain a name and a (space-separated) value of some setting.
+The filename that is used to generate a lock file.
 
-There are following settings:
+You may use it to prevent both Fido2RSS and HPT (or any other echomail processor that supports lock files) from running simultaneously and trying to process the same echomail area.
 
-* `LockFile` — the filename that is used to generate a lock file. You may use it to prevent Fido2RSS and HPT (or any other echomail processor that supports lock files) from running simultaneously and trying to process the same echomail area.
+### --base path
 
-* `AreaPath` — the full path (with the filename, but without extensions) of the JAM base.
+*(required)*
 
-* `AreaName` — the areatag (echotag) of the echomail area.
+The full path (with the filename, but without extensions) of the JAM base.
 
-* `Messages` — a number of the latest messages taken from the area and published to the RSS feed.
+### --area name
+
+*(required)*
+
+The areatag (echotag) of the echomail area.
+
+### --msg number
+
+How many latest messages are taken from the area and published to the RSS feed.
 
 ## License
 

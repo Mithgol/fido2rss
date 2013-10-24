@@ -1,8 +1,21 @@
 {
+"name": "fido2rss",
+"bin": "./fido2rss.js",
+"version": "0.0.1",
+"description": "Makes RSS feeds out of Fidonet echomail areas.",
+"keywords": ["Fidonet", "Fido", "RSS"],
+"author": { "name": "Mithgol the Webmaster" },
+"repository": {
+   "type": "git",
+   "url": "https://github.com/Mithgol/fido2rss.git"
+},
 "dependencies": {
+   "commander": "~2.0.0",
    "fidohtml": "~0.2.0",
    "fidonet-jam": "~1.0.1",
-   "rss": "~0.2.1",
-   "simteconf": "~0.1.4"
+   "rss": "~0.2.1"
+},
+"scripts": {
+   "test": "jshint --verbose fido2rss.js"
 }
 }
