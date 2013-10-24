@@ -48,6 +48,14 @@ The areatag (echotag) of the echomail area.
 
 How many latest messages are taken from the area and published to the RSS feed.
 
+## Testing Fido2RSS
+
+It is necessary to install [JSHint](http://jshint.com/) for testing.
+
+* You may install JSHint globally (`npm install jshint -g`) or locally (`npm install jshint` in the directory of Fido2RSS).
+
+After that you may run `npm test` (in the directory of Fido2RSS). Only the JS code errors are caugth.
+
 ## License
 
 MIT License, see the `LICENSE` file.
