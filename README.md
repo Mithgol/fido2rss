@@ -18,6 +18,14 @@ The application becomes installed globally and written in the `PATH`.
 
 You may visit https://github.com/Mithgol/fido2rss#readme occasionally to read the latest `README` because the package's version is not planned to grow after changes when they happen in `README` only. (However, `npm publish --force` may happen eventually.)
 
+### Installing as a portable application
+
+Instead of the above, download the [ZIP-packed](https://github.com/Mithgol/fido2rss/archive/master.zip) source code of Fido2RSS and unpack it to some directory. Then run `npm install --production` in that directory.
+
+You may now move that directory (for example, on a flash drive) across systems as long as they have the required version of Node.js installed.
+
+Unlike the above (`npm -g`), the application does not appear in the `PATH`, and thus you'll have to run it directly from the application's directory. You'll also have to use `node fido2rss [options]` instead of `fido2rss [options]`.
+
 ## Using Fido2RSS
 
 You may run the installed application by typing in the command line:
