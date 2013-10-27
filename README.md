@@ -32,7 +32,7 @@ You may run the installed application by typing in the command line:
 
 `fido2rss [options]`
 
-where `[options]` is a space-separated list of the following options:
+where `[options]` is a space-separated list of the following options and their values:
 
 ### --lock path
 
@@ -61,6 +61,12 @@ The areatag (echotag) of the echomail area.
 How many latest messages are taken from the area and published to the RSS feed.
 
 By default, 23.
+
+### --lock path
+
+*(required)*
+
+The full path (with the filename) that is used to generate the RSS output file.
 
 ## Testing Fido2RSS
 

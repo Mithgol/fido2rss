@@ -12,6 +12,8 @@ var opts = require('commander')
       'Path (with the filename, but no extension) of the JAM base.'
    ).option('--area <name>',
       'The areatag (echotag) of the echomail area.'
+   ).option('--out <path>',
+      'Path (with the filename) used to generate the RSS output.'
    ).option('--msg [number]',
       'How many latest messages from the area to publish in RSS.\n' +
       '(By default, 23.)'
@@ -40,6 +42,11 @@ var opts = require('commander')
 
    if( typeof opts.area !== 'string' || opts.area.length < 1 ){
       console.log('The JAM area name is not given.');
+      process.exit(1);
+   }
+
+   if( typeof opts.out !== 'string' || opts.out.length < 1 ){
+      console.log('The RSS output path is not given.');
       process.exit(1);
    }
 })();
