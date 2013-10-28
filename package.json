@@ -11,6 +11,7 @@
 },
 "dependencies": {
    "commander": "~2.0.0",
+   "lockfile": "~0.4.2",
    "fidohtml": "~0.2.0",
    "fidonet-jam": "~1.0.1",
    "rss": "~0.2.1"

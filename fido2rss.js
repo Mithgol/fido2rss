@@ -1,12 +1,15 @@
 #!/usr/bin/env node
 
 var JAM  = require('fidonet-jam');
+var lock = require('lockfile');
+var RSS  = require('rss');
 var util = require('util');
 
 // CLI options:
 
+var thisver = require('./package.json').version; 
 var opts = require('commander')
-   .version( require('./package.json').version )
+   .version(thisver)
    .option('--lock [path]',
       'Path (with the filename) used to generate a lock file.'
    ).option('--base <path>',
@@ -52,4 +55,53 @@ var opts = require('commander')
    }
 })();
 
+// Lock file, prepare the unlocking function:
+
+try {
+   if( typeof opts.lock === 'string' ){
+      lock.lockSync(opts.lock, {
+         retries: 2,
+         retryWait: 1000
+      });
+   }
+} catch(e) {
+   console.log('Cannot create lock: ' + opts.lock + '\n');
+   throw e;
+}
+
+var unlock = function(){
+   try {
+      if( typeof opts.lock === 'string' ){
+         lock.unlockSync(opts.lock, {
+            retries: 2,
+            retryWait: 1000
+         });
+      }
+   } catch(e) {
+      console.log('Cannot remove lock: ' + opts.lock + '\n');
+      throw e;
+   }
+};
+
+// Access Fidonet mail:
+
 var fidomail = JAM(opts.base);
+
+fidomail.readJDX(function(err){
+   if (err){
+      unlock();
+      throw err;
+   }
+   var feed = new RSS({
+      title: opts.area,
+      author: 'Fidonet authors of ' + opts.area,
+      description: opts.area + ' area (Fidonet)',
+      generator: 'Fido2RSS ' + thisver,
+      site_url: 'area://' + opts.area
+   });
+   var mailCounter = fidomail.size();
+
+   // …
+
+   unlock();
+});
