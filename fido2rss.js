@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 
+var fs   = require('fs');
 var JAM  = require('fidonet-jam');
 var lock = require('lockfile');
 var RSS  = require('rss');
@@ -85,22 +86,42 @@ var unlock = function(){
 // Access Fidonet mail:
 
 var fidomail = JAM(opts.base);
+var feed = new RSS({
+   title: opts.area,
+   author: 'Fidonet authors of ' + opts.area,
+   description: opts.area + ' area (Fidonet)',
+   generator: 'Fido2RSS ' + thisver,
+   site_url: 'area://' + opts.area
+});
+
+var mailCounter = 0;
+var renderNextItem = function(){
+   var nextItemNum = fidomail.size() - mailCounter;
+   if( nextItemNum < 1 ){
+      // Finish:
+      unlock();
+      fs.writeFileSync(opts.out, feed.xml(), {
+         encoding: 'utf8'
+      });
+   } else {
+      // Render one more mail item:
+      fidomail.readHeader(nextItemNum, function(err, header){
+         if (err){
+            unlock();
+            throw err;
+         }
+         var decoded = fidomail.decodeHeader(header);
+         //…
+         mailCounter++;
+         setImmediate(renderNextItem);
+      });
+   }
+};
 
 fidomail.readJDX(function(err){
    if (err){
       unlock();
       throw err;
    }
-   var feed = new RSS({
-      title: opts.area,
-      author: 'Fidonet authors of ' + opts.area,
-      description: opts.area + ' area (Fidonet)',
-      generator: 'Fido2RSS ' + thisver,
-      site_url: 'area://' + opts.area
-   });
-   var mailCounter = fidomail.size();
-
-   // …
-
-   unlock();
+   setImmediate(renderNextItem);
 });
