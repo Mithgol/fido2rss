@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 
+var JAM  = require('fidonet-jam');
 var util = require('util');
 
 // CLI options:
@@ -51,6 +52,4 @@ var opts = require('commander')
    }
 })();
 
-console.log(util.inspect(
-   opts, false, Infinity, true
-));
+var fidomail = JAM(opts.base);
