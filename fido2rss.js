@@ -3,11 +3,10 @@
 var JAM  = require('fidonet-jam');
 var lock = require('lockfile');
 var RSS  = require('rss');
-var util = require('util');
 
 // CLI options:
 
-var thisver = require('./package.json').version; 
+var thisver = require('./package.json').version;
 var opts = require('commander')
    .version(thisver)
    .option('--lock [path]',
