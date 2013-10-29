@@ -2,9 +2,10 @@
 
 var fs   = require('fs');
 var FidoHTML = require('fidohtml');
-var JAM  = require('fidonet-jam');
+var JAM = require('fidonet-jam');
 var lock = require('lockfile');
-var RSS  = require('rss');
+var moment = require('moment');
+var RSS = require('rss');
 
 // CLI options:
 
@@ -112,6 +113,39 @@ var renderNextItem = function(){
             throw err;
          }
          var decoded = fidomail.decodeHeader(header);
+         var itemURL = 'area://' + opts.area;
+
+         if( typeof decoded.msgid !== 'undefined' ){
+            itemURL += '?msgid=' + decoded.msgid;
+            itemURL += '&time=' + decoded.origTime[0];
+         } else {
+            itemURL += '?time=' + decoded.origTime[0];
+            itemURL += '-' + decoded.origTime[1];
+            itemURL += '-' + decoded.origTime[2];
+            itemURL += 'T' + decoded.origTime[3];
+            itemURL += ':' + decoded.origTime[4];
+            itemURL += ':' + decoded.origTime[5];
+         }
+
+         var itemDateZone = '+0';
+         if( typeof decoded.timezone !== 'undefined' ){
+            if( /^\d+$/.test(decoded.timezone) ){
+               decoded.timezone = '+' + decoded.timezone;
+            }
+            if( /^[+-]\d+$/.test(decoded.timezone) ){
+               itemDateZone = decoded.timezone;
+            }
+         }
+
+         var itemDateString = moment().zone(itemDateZone)
+         .year(decoded.origTime[0])
+         .month(decoded.origTime[1]-1)
+         .date(decoded.origTime[2])
+         .hour(decoded.origTime[3])
+         .minute(decoded.origTime[4])
+         .second(decoded.origTime[5])
+         .millisecond(0)
+         .format('ddd, D MMM YY HH:mm:ss ZZ');
 
          fidomail.decodeMessage(header, function(err, msgText){
             if (err){
@@ -121,7 +155,9 @@ var renderNextItem = function(){
             feed.item({
                'title': decoded.subj || '(no title)',
                'description': FidoHTML.fromText(msgText),
-               
+               'url': itemURL,
+               'author': decoded.from,
+               'date': itemDateString
             });
             mailCounter++;
             setImmediate(renderNextItem);
