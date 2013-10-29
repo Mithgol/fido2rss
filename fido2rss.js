@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 
 var fs   = require('fs');
+var FidoHTML = require('fidohtml');
 var JAM  = require('fidonet-jam');
 var lock = require('lockfile');
 var RSS  = require('rss');
@@ -111,9 +112,20 @@ var renderNextItem = function(){
             throw err;
          }
          var decoded = fidomail.decodeHeader(header);
-         //…
-         mailCounter++;
-         setImmediate(renderNextItem);
+
+         fidomail.decodeMessage(header, function(err, msgText){
+            if (err){
+               unlock();
+               throw err;
+            }
+            feed.item({
+               'title': decoded.subj || '(no title)',
+               'description': FidoHTML.fromText(msgText),
+               
+            });
+            mailCounter++;
+            setImmediate(renderNextItem);
+         });
       });
    }
 };
