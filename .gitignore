@@ -29,3 +29,9 @@ node_modules
 
 # NPM error logs
 npm-debug.log
+
+# Windows command batch files
+*.bat
+
+# Project-specific: RSS output
+*.rss
