@@ -62,7 +62,7 @@ How many latest messages are taken from the area and published to the RSS f
 
 By default, 23.
 
-### --lock path
+### --out path
 
 *(required)*
 
