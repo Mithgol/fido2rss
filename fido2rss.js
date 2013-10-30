@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 var fs   = require('fs');
-var FidoHTML = require('fidohtml');
+var FidoHTML = require('fidohtml')();
 var JAM = require('fidonet-jam');
 var lock = require('lockfile');
 var moment = require('moment');
@@ -61,10 +61,7 @@ var opts = require('commander')
 
 try {
    if( typeof opts.lock === 'string' ){
-      lock.lockSync(opts.lock, {
-         retries: 2,
-         retryWait: 1000
-      });
+      lock.lockSync(opts.lock);
    }
 } catch(e) {
    console.log('Cannot create lock: ' + opts.lock + '\n');
@@ -74,10 +71,7 @@ try {
 var unlock = function(){
    try {
       if( typeof opts.lock === 'string' ){
-         lock.unlockSync(opts.lock, {
-            retries: 2,
-            retryWait: 1000
-         });
+         lock.unlockSync(opts.lock);
       }
    } catch(e) {
       console.log('Cannot remove lock: ' + opts.lock + '\n');
@@ -99,7 +93,7 @@ var feed = new RSS({
 var mailCounter = 0;
 var renderNextItem = function(){
    var nextItemNum = fidomail.size() - mailCounter;
-   if( nextItemNum < 1 ){
+   if( nextItemNum < 1 || mailCounter >= opts.msg ){
       // Finish:
       unlock();
       fs.writeFileSync(opts.out, feed.xml(), {
@@ -116,7 +110,9 @@ var renderNextItem = function(){
          var itemURL = 'area://' + opts.area;
 
          if( typeof decoded.msgid !== 'undefined' ){
-            itemURL += '?msgid=' + decoded.msgid;
+            itemURL += '?msgid=' + encodeURIComponent(decoded.msgid).replace(
+               /%20/g, '+'
+            );
             itemURL += '&time=' + decoded.origTime[0];
          } else {
             itemURL += '?time=' + decoded.origTime[0];
