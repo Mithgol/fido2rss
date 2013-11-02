@@ -1,7 +1,7 @@
 {
 "name": "fido2rss",
 "bin": "./fido2rss.js",
-"version": "0.1.1",
+"version": "0.1.2",
 "description": "Makes RSS feeds out of Fidonet echomail areas.",
 "keywords": ["Fidonet", "Fido", "RSS"],
 "author": { "name": "Mithgol the Webmaster" },
