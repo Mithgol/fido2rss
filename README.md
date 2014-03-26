@@ -8,7 +8,7 @@ The **Fido2RSS** application makes RSS feeds out of Fidonet echomail areas.
 
 ## Installing Fido2RSS
 
-[![(npm package version)](https://badge.fury.io/js/fido2rss.png)](https://npmjs.org/package/fido2rss)
+[![(npm package version)](https://nodei.co/npm/fido2rss.png?compact=true)](https://npmjs.org/package/fido2rss)
 
 * Latest packaged version: `npm install -g fido2rss`
 
