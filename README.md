@@ -70,7 +70,7 @@ The full path (with the filename) that is used to generate the RSS output
 
 ## Testing Fido2RSS
 
-[![(build testing status)](https://travis-ci.org/Mithgol/fido2rss.png?branch=master)](https://travis-ci.org/Mithgol/fido2rss)
+[![(build testing status)](https://travis-ci.org/Mithgol/fido2rss.svg?branch=master)](https://travis-ci.org/Mithgol/fido2rss)
 
 It is necessary to install [JSHint](http://jshint.com/) for testing.
 
