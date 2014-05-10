@@ -3,6 +3,7 @@
 var fs   = require('fs');
 var FidoHTML = require('fidohtml')();
 var JAM = require('fidonet-jam');
+var Squish = require('fidonet-squish');
 var lock = require('lockfile');
 var moment = require('moment');
 var RSS = require('rss');
@@ -20,6 +21,8 @@ var opts = require('commander')
       'The areatag (echotag) of the echomail area.'
    ).option('--out <path>',
       'Path (with the filename) used to generate the RSS output.'
+   ).option('--type <type>',
+      'JAM or Squish'
    ).option('--msg [number]',
       'How many latest messages from the area to publish in RSS.\n' +
       '(By default, 23.)'
@@ -80,8 +83,11 @@ var unlock = function(){
 };
 
 // Access Fidonet mail:
-
-var fidomail = JAM(opts.base);
+if (opts.type==='Squish'){
+	var fidomail = Squish(opts.base);
+} else {
+	var fidomail = JAM(opts.base);
+}
 var feed = new RSS({
    title: opts.area,
    author: 'Fidonet authors of ' + opts.area,
@@ -162,10 +168,20 @@ var renderNextItem = function(){
    }
 };
 
-fidomail.readJDX(function(err){
-   if (err){
-      unlock();
-      throw err;
-   }
-   setImmediate(renderNextItem);
-});
+if (opts.type==='Squish'){
+	fidomail.readSQI(function(err){
+		if (err){
+			unlock();
+			throw err;
+		}
+		setImmediate(renderNextItem);
+	});
+} else {
+	fidomail.readJDX(function(err){
+		if (err){
+			unlock();
+			throw err;
+		}
+		setImmediate(renderNextItem);
+	});
+}
