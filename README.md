@@ -4,7 +4,7 @@ The **Fido2RSS** application makes RSS feeds out of Fidonet echomail areas.
 
 * Fido2RSS is written in JavaScript and requires [Node.js](http://nodejs.org/) (version 0.10 or newer) to run.
 
-* Fido2RSS supports only the JAM [(Joaquim-Andrew-Mats)](http://groups.google.com/group/fido7.ru.ftn.develop/msg/e2f5486f80394418) type of Fidonet message bases.
+* Fido2RSS supports only a couple of Fidonet message base types: JAM [(Joaquim-Andrew-Mats)](http://groups.google.com/group/fido7.ru.ftn.develop/msg/e2f5486f80394418) and Squish.
 
 ## Installing Fido2RSS
 
@@ -46,7 +46,13 @@ You may use it to prevent both Fido2RSS and HPT (or any other echomail proc
 
 *(required)*
 
-The full path (with the filename, but without extensions) of the JAM base.
+The full path (with the filename, but without extensions) of the message base.
+
+### --type typeID
+
+*(optional)*
+
+Message base type. Use `--type Squish` for Squish message bases. The default type is JAM.
 
 ### --area name
 
