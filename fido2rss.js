@@ -84,9 +84,9 @@ var unlock = function(){
 
 // Access Fidonet mail:
 if (opts.type==='Squish'){
-	var fidomail = Squish(opts.base);
+   var fidomail = Squish(opts.base);
 } else {
-	var fidomail = JAM(opts.base);
+   var fidomail = JAM(opts.base);
 }
 var feed = new RSS({
    title: opts.area,
@@ -169,19 +169,19 @@ var renderNextItem = function(){
 };
 
 if (opts.type==='Squish'){
-	fidomail.readSQI(function(err){
-		if (err){
-			unlock();
-			throw err;
-		}
-		setImmediate(renderNextItem);
-	});
+   fidomail.readSQI(function(err){
+      if (err){
+         unlock();
+         throw err;
+      }
+      setImmediate(renderNextItem);
+   });
 } else {
-	fidomail.readJDX(function(err){
-		if (err){
-			unlock();
-			throw err;
-		}
-		setImmediate(renderNextItem);
-	});
+   fidomail.readJDX(function(err){
+      if (err){
+         unlock();
+         throw err;
+      }
+      setImmediate(renderNextItem);
+   });
 }
