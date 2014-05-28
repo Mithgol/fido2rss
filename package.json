@@ -1,7 +1,7 @@
 {
 "name": "fido2rss",
 "bin": "./fido2rss.js",
-"version": "0.2.2",
+"version": "0.2.3",
 "description": "Makes RSS feeds out of Fidonet echomail areas.",
 "keywords": ["Fidonet", "Fido", "RSS"],
 "author": { "name": "Mithgol the Webmaster" },
@@ -13,7 +13,7 @@
    "commander": "~2.0.0",
    "fidohtml": "~0.2.0",
    "fidonet-jam": "~3.6.2",
-   "fidonet-squish": "~0.0.11",
+   "fidonet-squish": "~0.0.18",
    "lockfile": "~0.4.2",
    "moment": "~2.4.0",
    "rss": "~0.2.1"
