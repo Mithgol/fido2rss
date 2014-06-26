@@ -1,10 +1,11 @@
 {
 "name": "fido2rss",
 "bin": "./fido2rss.js",
-"version": "0.3.0",
+"version": "0.3.1",
 "description": "Makes RSS feeds out of Fidonet echomail areas.",
 "keywords": ["Fidonet", "Fido", "RSS"],
 "author": { "name": "Mithgol the Webmaster" },
+"license": "MIT",
 "repository": {
    "type": "git",
    "url": "https://github.com/Mithgol/fido2rss.git"
