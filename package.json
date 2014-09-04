@@ -14,7 +14,7 @@
    "commander": "~2.3.0",
    "fidohtml": "~0.6.3",
    "fidonet-jam": "~3.8.3",
-   "fidonet-squish": "~0.0.26",
+   "fidonet-squish": "~0.0.35",
    "lockfile": "~1.0.0",
    "moment": "~2.8.2",
    "rss": "~0.3.2"
