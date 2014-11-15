@@ -11,7 +11,7 @@
    "url": "https://github.com/Mithgol/fido2rss.git"
 },
 "dependencies": {
-   "commander": "~2.3.0",
+   "commander": "~2.5.0",
    "fidohtml": "~0.15.0",
    "fidonet-jam": "~3.8.3",
    "fidonet-squish": "~0.0.35",
