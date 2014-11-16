@@ -84,6 +84,8 @@ It is necessary to install [JSHint](http://jshint.com/) for testing.
 
 After that you may run `npm test` (in the directory of Fido2RSS). Only the JS code errors are caught.
 
+**Note:** if you test a generated local RSS file by dragging and dropping it to Firefox, the file is not recognized as RSS. That's a known Firefox bug ([#420004](https://bugzilla.mozilla.org/show_bug.cgi?id=420004)) discovered in 2008.
+
 ## License
 
 MIT License, see the `LICENSE` file.
