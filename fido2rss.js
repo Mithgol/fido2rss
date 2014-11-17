@@ -1,12 +1,14 @@
 #!/usr/bin/env node
 
 var fs   = require('fs');
-var FidoHTML = require('fidohtml')();
 var JAM = require('fidonet-jam');
 var Squish = require('fidonet-squish');
 var lock = require('lockfile');
 var moment = require('moment');
 var RSS = require('rss');
+var FidoHTML = require('fidohtml')({
+   fontColor: true
+});
 
 // CLI options:
 
@@ -83,7 +85,7 @@ var unlock = function(){
 };
 
 // Access Fidonet mail:
-if (opts.type==='Squish'){
+if( opts.type === 'Squish' ){
    var fidomail = Squish(opts.base);
 } else {
    var fidomail = JAM(opts.base);
