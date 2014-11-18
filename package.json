@@ -12,7 +12,7 @@
 },
 "dependencies": {
    "commander": "~2.5.0",
-   "fidohtml": "~0.15.0",
+   "fidohtml": "~0.16.0",
    "fidonet-jam": "~3.8.3",
    "fidonet-squish": "~0.0.35",
    "lockfile": "~1.0.0",
