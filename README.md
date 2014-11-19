@@ -8,13 +8,13 @@ The **Fido2RSS** application makes RSS feeds out of Fidonet echomail areas.
 
 ## Installing Fido2RSS
 
-[![(npm package version)](https://nodei.co/npm/fido2rss.png?compact=true)](https://npmjs.org/package/fido2rss)
+[![(npm package version)](https://nodei.co/npm/fido2rss.png?downloads=true&downloadRank=true)](https://npmjs.org/package/fido2rss)
 
 * Latest packaged version: `npm install -g fido2rss`
 
 * Latest githubbed version: `npm install -g https://github.com/Mithgol/fido2rss/tarball/master`
 
-The application becomes installed globally and written in the `PATH`.
+The application becomes installed globally and appears in the `PATH`.
 
 You may visit https://github.com/Mithgol/fido2rss#readme occasionally to read the latest `README` because the package's version is not planned to grow after changes when they happen in `README` only. (And `npm publish --force` is [forbidden](http://blog.npmjs.org/post/77758351673/no-more-npm-publish-f) nowadays.)
 
