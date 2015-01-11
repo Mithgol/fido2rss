@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-var fs   = require('fs');
+var fs = require('fs');
 var JAM = require('fidonet-jam');
 var Squish = require('fidonet-squish');
 var lock = require('lockfile');
@@ -24,7 +24,7 @@ var opts = require('commander')
    ).option('--out <path>',
       'Path (with the filename) used to generate the RSS output.'
    ).option('--type <type>',
-      'JAM or Squish'
+      'Message base type: "JAM" (default) or "Squish" (without quotes).'
    ).option('--msg [number]',
       'How many latest messages from the area to publish in RSS.\n' +
       '(By default, 23.)'
@@ -85,7 +85,7 @@ var unlock = function(){
 };
 
 // Access Fidonet mail:
-if( opts.type === 'Squish' ){
+if( typeof opts.type === 'string' && opts.type.toLowerCase() === 'squish' ){
    var fidomail = Squish(opts.base);
 } else {
    var fidomail = JAM(opts.base);
@@ -170,7 +170,7 @@ var renderNextItem = function(){
    }
 };
 
-if (opts.type==='Squish'){
+if( typeof opts.type === 'string' && opts.type.toLowerCase() === 'squish' ){
    fidomail.readSQI(function(err){
       if (err){
          unlock();
