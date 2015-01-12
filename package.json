@@ -1,6 +1,7 @@
 {
 "name": "fido2rss",
 "bin": "./fido2rss.js",
+"main": "corecode.js",
 "preferGlobal": true,
 "version": "0.4.0",
 "description": "Makes RSS feeds out of Fidonet echomail areas.",
@@ -21,6 +22,6 @@
    "rss": "~1.0.1"
 },
 "scripts": {
-   "test": "jshint --verbose fido2rss.js"
+   "test": "jshint --verbose fido2rss.js corecode.js"
 }
 }
