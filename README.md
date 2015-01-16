@@ -1,4 +1,4 @@
-The **Fido2RSS** application makes RSS feeds out of Fidonet echomail areas.
+**Fido2RSS** is a Node.js module and a CLI application; both make RSS feeds out of Fidonet echomail areas.
 
 ## Requirements
 
@@ -10,13 +10,23 @@ The **Fido2RSS** application makes RSS feeds out of Fidonet echomail areas.
 
 [![(npm package version)](https://nodei.co/npm/fido2rss.png?downloads=true&downloadRank=true)](https://npmjs.org/package/fido2rss)
 
+### Installing as a module
+
+* Latest packaged version: `npm install fido2rss`
+
+* Latest githubbed version: `npm install https://github.com/Mithgol/fido2rss/tarball/master`
+
+The module becomes installed locally and appears in `node_modules/fido2rss`. Then use `require('fido2rss')` to access the module.
+
+You may visit https://github.com/Mithgol/fido2rss#readme occasionally to read the latest `README` because the package's version is not planned to grow after changes when they happen in `README` only. (And `npm publish --force` is [forbidden](http://blog.npmjs.org/post/77758351673/no-more-npm-publish-f) nowadays.)
+
+### Installing as an application
+
 * Latest packaged version: `npm install -g fido2rss`
 
 * Latest githubbed version: `npm install -g https://github.com/Mithgol/fido2rss/tarball/master`
 
-The application becomes installed globally and appears in the `PATH`.
-
-You may visit https://github.com/Mithgol/fido2rss#readme occasionally to read the latest `README` because the package's version is not planned to grow after changes when they happen in `README` only. (And `npm publish --force` is [forbidden](http://blog.npmjs.org/post/77758351673/no-more-npm-publish-f) nowadays.)
+The application becomes installed globally and appears in the `PATH`. Then use `fido2rss` command to run the application.
 
 ### Installing as a portable application
 
@@ -26,7 +36,7 @@ You may now move that directory (for example, on a flash drive) across syst
 
 Unlike the above (`npm -g`), the application does not appear in the `PATH`, and thus you'll have to run it directly from the application's directory. You'll also have to use `node fido2rss [options]` instead of `fido2rss [options]`.
 
-## Using Fido2RSS
+## Using Fido2RSS as an application
 
 You may run the installed application by typing in the command line:
 
