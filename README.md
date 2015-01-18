@@ -74,7 +74,7 @@ The areatag (echotag) of the echomail area.
 
 *(optional)*
 
-How many latest messages are taken from the area and published to the RSS feed.
+How many latest messages are taken from the echomail area and published to the RSS feed.
 
 By default, 23.
 
@@ -83,6 +83,33 @@ By default, 23.
 *(required)*
 
 The full path (with the filename) that is used to generate the RSS output file.
+
+## Using Fido2RSS as a module
+
+You may `require()` the installed module and get a function that asynchronously converts Fidonet messages to RSS output.
+
+That function accepts an object of options and a callback that receives an error (or `null`) and RSS output (a string).
+
+```js
+var Fido2RSS = require('fido2rss');
+Fido2RSS(options, function(err, outputRSS){
+   if( err ){
+      // an error happened
+   } else {
+      // conversion is successful, you may use `outputRSS` now
+   }
+});
+```
+
+The following properties in the object of options are processed:
+
+* `options.area` — the areatag (echotag) of the echomail area. (Required.)
+
+* `options.base` — the full path (with the filename, but without extensions) of the message base. (Required.)
+
+* `options.msg` — how many latest messages are taken from the echomail area and published to the RSS feed. (By default, 23.)
+
+* `options.type` — the message base's type. By default, `'JAM'`; can also be `'Squish'` (not case-sensitive). An unknown type is also treated as `'JAM'`.
 
 ## Testing Fido2RSS
 

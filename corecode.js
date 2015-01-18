@@ -28,11 +28,6 @@ var findErrorsInOptions = function(opts){
       process.exit(1);
    }
 
-   if( typeof opts.out !== 'string' || opts.out.length < 1 ){
-      console.log('The RSS output path is not given.');
-      process.exit(1);
-   }
-
    return opts;
 };
 

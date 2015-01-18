@@ -29,6 +29,11 @@ if( typeof opts.lock !== 'string' || opts.lock.length < 1 ){
    opts.lock = void 0;
 }
 
+if( typeof opts.out !== 'string' || opts.out.length < 1 ){
+   console.log('The RSS output path is not given.');
+   process.exit(1);
+}
+
 // Lock file, prepare the unlocking function:
 try {
    if( typeof opts.lock === 'string' ){
