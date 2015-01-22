@@ -19,12 +19,12 @@ var findErrorsInOptions = function(opts, callback){
    }
 
    if( typeof opts.base !== 'string' || opts.base.length < 1 ){
-      callback(new Error('The JAM base path is not given.'));
+      callback(new Error('The base path is not given.'));
       return;
    }
 
    if( typeof opts.area !== 'string' || opts.area.length < 1 ){
-      callback(new Error('The JAM area name is not given.'));
+      callback(new Error('The area name is not given.'));
       return;
    }
 
