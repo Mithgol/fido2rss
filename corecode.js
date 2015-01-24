@@ -90,7 +90,7 @@ module.exports = function(options, callback){
                   }
                }
 
-               var itemDateString = moment().zone(itemDateZone)
+               var itemDateString = moment().utcOffset(itemDateZone)
                .year(decoded.origTime[0])
                .month(decoded.origTime[1]-1)
                .date(decoded.origTime[2])
