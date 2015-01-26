@@ -111,6 +111,12 @@ The following properties in the object of options are processed:
 
 * `options.type` — the message base's type. By default, `'JAM'`; can also be `'Squish'` (not case-sensitive). An unknown type is also treated as `'JAM'`.
 
+* `options.areaPrefixURL` — the prefix to be added before `area://…` URLs that appear in RSS output. (For example, if `.areaPrefixURL` is `'https://example.org/fidonet?'`, then the URL `'https://example.org/fidonet?area://Test/'` will appear instead of original `'area://Test/'`.) Some WebBBS support is necessary on the server side (of the given server) for such URLs to be working.
+   * This property also affects URLs of images and other files decoded from UUE codes. When the property is defined, these files are given with prefixed `area://…` URLs instead of [RFC2397-compliant](http://tools.ietf.org/html/rfc2397) `data:` URLs.
+   * By default, `.areaPrefixURL` is not defined. It means that prefixing does not happen and files use `data:` URLs.
+   * This property is useful when RSS output is known to be consumed by RSS readers or web sites that are not ready to encounter [FGHI URLs](https://github.com/Mithgol/FGHI-URL) or impose length limits on individual RSS items or the whole RSS feed (`data:` URLs tend to be rather lengthy).
+      * For example, [LiveJournal](http://www.livejournal.com/) has some [small entry size](http://www.livejournal.com/support/faq/165.html).
+
 ## Testing Fido2RSS
 
 [![(build testing status)](https://travis-ci.org/Mithgol/fido2rss.svg?branch=master)](https://travis-ci.org/Mithgol/fido2rss)
