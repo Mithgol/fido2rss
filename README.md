@@ -119,7 +119,7 @@ The following properties in the object of options are processed:
 
 ## Testing Fido2RSS
 
-[![(build testing status)](https://travis-ci.org/Mithgol/fido2rss.svg?branch=master)](https://travis-ci.org/Mithgol/fido2rss)
+[![(build testing status)](https://img.shields.io/travis/Mithgol/fido2rss/master.svg?style=plastic)](https://travis-ci.org/Mithgol/fido2rss)
 
 It is necessary to install [JSHint](http://jshint.com/) for testing.
 
