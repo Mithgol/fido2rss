@@ -2,7 +2,7 @@
 
 ## Requirements
 
-* Fido2RSS is written in JavaScript and requires [Node.js](http://nodejs.org/) (version 0.10 or newer) to run.
+* Fido2RSS is written in JavaScript and requires [Node.js](http://nodejs.org/) to run. (Node.js version 0.10.x or 0.12.x is recommended. The latest stable [io.js](https://iojs.org/) is fine too.)
 
 * Fido2RSS supports only a couple of Fidonet message base types: JAM [(Joaquim-Andrew-Mats)](http://groups.google.com/group/fido7.ru.ftn.develop/msg/e2f5486f80394418) and Squish.
 
