@@ -2,9 +2,7 @@ var JAM = require('fidonet-jam');
 var Squish = require('fidonet-squish');
 var moment = require('moment');
 var RSS = require('rss');
-var FidoHTML = require('fidohtml')({
-   fontColor: true
-});
+var FidoHTML = require('fidohtml');
 
 var thisver = require('./package.json').version;
 
@@ -66,19 +64,32 @@ module.exports = function(options, callback){
 
                var decoded = fidomail.decodeHeader(header);
                var itemURL = 'area://' + opts.area;
+               var itemURLFilters = '';
 
                if( typeof decoded.msgid !== 'undefined' ){
-                  itemURL += '?msgid=' +
-                     encodeURIComponent(decoded.msgid).replace( /%20/g, '+' );
-                  itemURL += '&time=' + decoded.origTime[0];
+                  itemURLFilters = [
+                     '?msgid=',
+                     encodeURIComponent(decoded.msgid).replace( /%20/g, '+' ),
+                     '&time=',
+                     decoded.origTime[0]
+                  ].join('');
                } else {
-                  itemURL += '?time=' + decoded.origTime[0];
-                  itemURL += '-' + decoded.origTime[1];
-                  itemURL += '-' + decoded.origTime[2];
-                  itemURL += 'T' + decoded.origTime[3];
-                  itemURL += ':' + decoded.origTime[4];
-                  itemURL += ':' + decoded.origTime[5];
+                  itemURLFilters = [
+                     '?time=',
+                     decoded.origTime[0],
+                     '-',
+                     decoded.origTime[1],
+                     '-',
+                     decoded.origTime[2],
+                     'T',
+                     decoded.origTime[3],
+                     ':',
+                     decoded.origTime[4],
+                     ':',
+                     decoded.origTime[5]
+                  ].join('');
                }
+               itemURL += itemURLFilters;
 
                var itemDateZone = '+0';
                if( typeof decoded.timezone !== 'undefined' ){
@@ -103,10 +114,25 @@ module.exports = function(options, callback){
                fidomail.decodeMessage(header, function(err, msgText){
                   if( err ) return callback(err);
 
+                  var FidoHTMLOptions = {
+                     fontColor: true
+                  };
+                  var itemURLPrefix = '';
+                  if( typeof opts.areaPrefixURL !== 'undefined' ){
+                     itemURLPrefix = opts.areaPrefixURL;
+                     FidoHTMLOptions.URLPrefixes.area = opts.areaPrefixURL;
+                     FidoHTMLOptions.fileURLParts = [
+                        opts.areaPrefixURL,
+                        itemURLFilters
+                     ];
+                  }
+
                   feed.item({
                      'title': decoded.subj || '(no title)',
-                     'description': FidoHTML.fromText(msgText),
-                     'url': itemURL,
+                     'description': FidoHTML(
+                        FidoHTMLOptions
+                     ).fromText(msgText),
+                     'url': itemURLPrefix + itemURL,
                      'author': decoded.from,
                      'date': itemDateString
                   });
