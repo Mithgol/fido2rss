@@ -1,3 +1,5 @@
+[![(a histogram of downloads)](https://nodei.co/npm-dl/fido2rss.png?height=3)](https://npmjs.org/package/fido2rss)
+
 **Fido2RSS** is a Node.js module and a CLI application; both make RSS feeds out of Fidonet echomail areas.
 
 ## Requirements
