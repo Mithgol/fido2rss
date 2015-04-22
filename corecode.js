@@ -1,8 +1,9 @@
+var FidoHTML = require('fidohtml');
+var fiunis = require('fiunis');
 var JAM = require('fidonet-jam');
-var Squish = require('fidonet-squish');
 var moment = require('moment');
 var RSS = require('rss');
-var FidoHTML = require('fidohtml');
+var Squish = require('fidonet-squish');
 
 var thisver = require('./package.json').version;
 
@@ -128,7 +129,7 @@ module.exports = function(options, callback){
                   }
 
                   feed.item({
-                     'title': decoded.subj || '(no title)',
+                     'title': fiunis.decode(decoded.subj) || '(no title)',
                      'description': FidoHTML(
                         FidoHTMLOptions
                      ).fromText(msgText),
