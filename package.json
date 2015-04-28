@@ -19,6 +19,7 @@
    "fiunis": "~2.1.1",
    "lockfile": "~1.0.0",
    "moment": "~2.10.0",
+   "nodelist": "~1.1.5",
    "rss": "~1.1.1"
 },
 "scripts": {
