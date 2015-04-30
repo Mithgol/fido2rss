@@ -36,7 +36,7 @@ Instead of the above, download the [ZIP-packed](https://github.com/Mithgol/fido
 
 You may now move that directory (for example, on a flash drive) across systems as long as they have the required version of Node.js installed.
 
-Unlike the above (`npm -g`), the application does not appear in the `PATH`, and thus you'll have to run it directly from the application's directory. You'll also have to use `node fido2rss [options]` instead of `fido2rss [options]`.
+Unlike the above (`npm -g`), the application does not appear in the `PATH`, and thus you'll have to run it directly from the application's directory. You'll also have to run `node fido2rss [options]` instead of `fido2rss [options]`.
 
 ## Using Fido2RSS as an application
 
