@@ -7,7 +7,6 @@
 * Fido2RSS is written in JavaScript and requires [Node.js](http://nodejs.org/) to run.
 
 * Fido2RSS supports only a couple of Fidonet message base types: JAM [(Joaquim-Andrew-Mats)](http://groups.google.com/group/fido7.ru.ftn.develop/msg/e2f5486f80394418) and Squish.
-   * Working with Squish in the latest stable [io.js](https://iojs.org/) or Node v4.0.x is not supported because they are [not backwards-compatible](https://github.com/nodejs/node/issues/2835) with older interfaces currently used by [`iconv-lite`](https://www.npmjs.com/package/iconv-lite) and thus by [`fidonet-squish`](https://www.npmjs.com/package/fidonet-squish).
 
 ## Installing Fido2RSS
 
