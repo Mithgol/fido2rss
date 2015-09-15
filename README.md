@@ -5,6 +5,8 @@
 ## Requirements
 
 * Fido2RSS is written in JavaScript and requires [Node.js](http://nodejs.org/) to run.
+* Starting from v1.0.0, this module requires Node.js version 4.0.0 or newer.
+* You may run older versions of this module in Node.js version 0.10.x or 0.12.x. These older versions, however, had to contain an additional subdependency ([`array.prototype.findindex`](https://www.npmjs.com/package/array.prototype.findindex)) as a polyfill for a missing [ECMAScript 2015 (ES6) feature](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/findIndex) which is now a part of Node.js.
 
 * Fido2RSS supports only a couple of Fidonet message base types: JAM [(Joaquim-Andrew-Mats)](http://groups.google.com/group/fido7.ru.ftn.develop/msg/e2f5486f80394418) and Squish.
 
