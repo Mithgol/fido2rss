@@ -116,7 +116,11 @@ module.exports = function(options, callback){
                   if( err ) return callback(err);
 
                   var FidoHTMLOptions = {
-                     fontColor: true
+                     fontColor: true,
+                     URLPrefixes: {'*': ''} // default; ready to be extended
+                  };
+                  FidoHTMLOptions.URLPrefixes.fs = function IPFS2WWW(IPFSURL){
+                     return IPFSURL.replace(/^fs:\/*/g, 'http://ipfs.io/');
                   };
                   var itemURLPrefix = '';
                   if( typeof opts.areaPrefixURL !== 'undefined' ){
