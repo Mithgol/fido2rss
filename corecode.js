@@ -117,11 +117,13 @@ module.exports = function(options, callback){
 
                   var FidoHTMLOptions = {
                      fontColor: true,
-                     URLPrefixes: {'*': ''} // default; ready to be extended
+                     URLPrefixes: {
+                        '*': '', // default
+                        fs: IPFSURL => IPFSURL.replace(
+                           /^fs:\/*/g, 'http://ipfs.io/'
+                        )
+                     }
                   };
-                  FidoHTMLOptions.URLPrefixes.fs = IPFSURL => IPFSURL.replace(
-                     /^fs:\/*/g, 'http://ipfs.io/'
-                  );
                   var itemURLPrefix = '';
                   if( typeof opts.areaPrefixURL !== 'undefined' ){
                      itemURLPrefix = opts.areaPrefixURL;
