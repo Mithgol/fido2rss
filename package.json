@@ -20,7 +20,7 @@
    "lockfile": "~1.0.0",
    "moment": "~2.10.0",
    "nodelist": "~2.0.0",
-   "rss": "~1.1.1"
+   "rss": "~1.2.0"
 },
 "scripts": {
    "test": "jshint --verbose fido2rss.js corecode.js"
