@@ -5,23 +5,34 @@ var lock = require('lockfile');
 
 var fido2rss = require('./');
 
+const shi = 20;
+
 // CLI options:
-var thisver = require('./package.json').version;
 var opts = require('commander')
-   .version(thisver)
+   .version( require('./package.json').version )
    .option('--lock [path]',
-      'Path (with the filename) used to generate a lock file.'
+      "Lock file's path (and filename)."
    ).option('--base <path>',
-      'Path (with the filename, but no extension) of the JAM base.'
+      "Message base's path (and filename, but no extension)."
    ).option('--area <name>',
       'The areatag (echotag) of the echomail area.'
+   ).option('--type [type]',
+      'Message base type: "JAM" (default) or "Squish".\n' +
+      ' '.repeat(shi) +
+      '("JAM" or "Squish" must be given without quotes.)',
+      'JAM'
    ).option('--out <path>',
-      'Path (with the filename) used to generate the RSS output.'
-   ).option('--type <type>',
-      'Message base type: "JAM" (default) or "Squish" (without quotes).'
+      "RSS output's path (and filename)."
    ).option('--msg [number]',
-      'How many latest messages from the area to publish in RSS.\n' +
-      '(By default, 23.)'
+      'How many latest messages to publish in RSS.\n' +
+      ' '.repeat(shi) + '(By default, 23 messages are published.)'
+   ).option('--IPFS [host:port]',
+      'Use an IPFS gateway to store UUE-encoded images.\n' +
+      ' '.repeat(shi) + '(If "--IPFS" is given without host:port,\n' +
+      ' '.repeat(shi) + 'the default host:port is localhost:5001.\n' +
+      ' '.repeat(shi) +
+      'If even "--IPFS" is missing, then UUE-encoded images\n' +
+      ' '.repeat(shi) + 'are not stored in IPFS at all.)'
    )
    .parse(process.argv);
 

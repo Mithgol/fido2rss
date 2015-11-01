@@ -12,6 +12,7 @@
    "url": "https://github.com/Mithgol/fido2rss.git"
 },
 "dependencies": {
+   "async": "~1.5.0",
    "commander": "~2.9.0",
    "fidohtml": "~1.3.0",
    "fidonet-jam": "~3.8.9",
@@ -21,7 +22,8 @@
    "lockfile": "~1.0.0",
    "moment": "~2.10.0",
    "nodelist": "~2.0.0",
-   "rss": "~1.2.0"
+   "rss": "~1.2.0",
+   "uue": "~3.0.0"
 },
 "scripts": {
    "test": "jshint --verbose fido2rss.js corecode.js"

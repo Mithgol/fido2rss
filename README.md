@@ -62,17 +62,23 @@ You may use it to prevent both Fido2RSS and HPT (or any other echomail proc
 
 The full path (with the filename, but without extensions) of the message base.
 
+### --area name
+
+*(required)*
+
+The areatag (echotag) of the echomail area.
+
 ### --type typeID
 
 *(optional)*
 
 Message base type. Use `--type Squish` for Squish message bases. The default type is JAM.
 
-### --area name
+### --out path
 
 *(required)*
 
-The areatag (echotag) of the echomail area.
+The full path (with the filename) that is used to generate the RSS output file.
 
 ### --msg number
 
@@ -82,11 +88,19 @@ How many latest messages are taken from the echomail area and published to t
 
 By default, 23.
 
-### --out path
+### --IPFS host:port
 
-*(required)*
+*(optional)*
 
-The full path (with the filename) that is used to generate the RSS output file.
+If this option is present, then UUE-encoded images are automatically decoded and put to [IPFS](https://ipfs.io/).
+
+Markdown-alike image declarations are inserted instead of UUE codes, and thus the RSS feed's size is reduced. This is important for RSS consumers that do not tolerate large entries. (For example, [LiveJournal](http://www.livejournal.com/) has some [small entry size](http://www.livejournal.com/support/faq/165.html).)
+
+The given `host:port` is used to contact an IPFS gateway.
+
+* If a mere `--IPFS` is given (i.e. without `host:port` part), the default gateway `--IPFS localhost:5001` is used (i.e. an IPFS daemon is expected to be running locally, alongside Fido2RSS).
+
+* If even `--IPFS` is missing, UUE-encoded images are left as they are (not IPFS-hosted at all), i.e. this option is off by default.
 
 ## Using Fido2RSS as a module
 
@@ -115,9 +129,15 @@ The following properties in the object of options are processed:
 
 * `options.type` — the message base's type. By default, `'JAM'`; can also be `'Squish'` (not case-sensitive). An unknown type is also treated as `'JAM'`.
 
+* `options.IPFS` — this option is used to decide if UUE-encoded images are automatically decoded and put to [IPFS](https://ipfs.io/). This option may have one of the following values:
+   * `undefined` — UUE-encoded images are not put to IPFS.
+   * `true` — UUE-encoded images are automatically decoded and put to IPFS. Markdown-alike image declarations are inserted instead of UUE codes. A local IPFS gateway (localhost:5001) is contacted.
+   * `'host:port'` — Same as above, but a remote IPFS gateway is contacted (the given `'host:port'` string is used as its address).
+
 * `options.areaPrefixURL` — the prefix to be added before `area://…` URLs that appear in RSS output. (For example, if `.areaPrefixURL` is `'https://example.org/fidonet?'`, then the URL `'https://example.org/fidonet?area://Test/'` will appear instead of original `'area://Test/'`.) Some WebBBS support is necessary on the server side (of the given server) for such URLs to be working.
    * This property also affects URLs of images and other files decoded from UUE codes. When the property is defined, these files are given with prefixed `area://…` URLs instead of [RFC2397-compliant](http://tools.ietf.org/html/rfc2397) `data:` URLs.
-   * By default, `.areaPrefixURL` is not defined. It means that prefixing does not happen and files use `data:` URLs.
+   * However, images are not affected if they were already decoded and put to IPFS.
+   * By default, `.areaPrefixURL` is not defined. It means that prefixing does not happen and files use `data:` URLs (unless put to IPFS).
    * This property is useful when RSS output is known to be consumed by RSS readers or web sites that are not ready to encounter [FGHI URLs](https://github.com/Mithgol/FGHI-URL) or impose length limits on individual RSS items or the whole RSS feed (`data:` URLs tend to be rather lengthy).
       * For example, [LiveJournal](http://www.livejournal.com/) has some [small entry size](http://www.livejournal.com/support/faq/165.html).
 

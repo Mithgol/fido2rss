@@ -1,14 +1,16 @@
+var async = require('async');
 var FidoHTML = require('fidohtml');
 var fiunis = require('fiunis');
+var IPFSAPI = require('ipfs-api');
 var JAM = require('fidonet-jam');
+var MIME = require('mime');
 var moment = require('moment');
 var RSS = require('rss');
 var Squish = require('fidonet-squish');
-
-var thisver = require('./package.json').version;
+var UUE = require('uue');
 
 // Error processing:
-var findErrorsInOptions = function(opts, callback){
+var findErrorsInOptions = (opts, callback) => {
    /* jshint bitwise: false */
 
    if( typeof opts.msg !== 'string' || opts.msg.length < 1 ){
@@ -17,21 +19,92 @@ var findErrorsInOptions = function(opts, callback){
       opts.msg = opts.msg |0;
    }
 
-   if( typeof opts.base !== 'string' || opts.base.length < 1 ){
-      callback(new Error('The base path is not given.'));
-      return;
-   }
+   if(
+      typeof opts.base !== 'string' || opts.base.length < 1
+   ) return callback(new Error('The base path is not given.'));
 
-   if( typeof opts.area !== 'string' || opts.area.length < 1 ){
-      callback(new Error('The area name is not given.'));
-      return;
+   if(
+      typeof opts.area !== 'string' || opts.area.length < 1
+   ) return callback(new Error('The area name is not given.'));
+
+   if( typeof opts.IPFS === 'undefined' ){
+      opts.IPFS = null;
+   } else {
+      if( opts.IPFS === true ){
+         opts.IPFS = {
+            host: 'localhost',
+            port: 5001
+         };
+      } else {
+         var matchesIPFS = /^(.+):(\d+)$/.exec(opts.IPFS);
+         if( matchesIPFS === null ) return callback(
+            new Error('The IPFS host:port is invalid.')
+         );
+         opts.IPFS = {
+            host: matchesIPFS[1],
+            port: matchesIPFS[2]
+         };
+      }
    }
 
    callback(null, opts);
 };
 
-module.exports = function(options, callback){
-   findErrorsInOptions(options, function(err, opts){
+var messageImgUUE2IPFS = (msgText, optsIPFS, callback) => {
+   if( optsIPFS === null ) return callback(null, msgText);
+   async.mapLimit(
+      UUE.split(msgText),
+      2, // concurrency of `.mapLimit`
+      (nextChunk, doneChunk) => {
+         if( typeof nextChunk === 'string' ) return setImmediate(() =>
+            doneChunk(null, nextChunk) // not an UUE
+         );
+
+         var mimeType = MIME.lookup(nextChunk.name);
+         if([
+            'image/jpeg',
+            'image/png',
+            'image/gif',
+            'image/svg+xml'
+         ].indexOf(mimeType) < 0 ) return setImmediate(() =>
+            doneChunk(null, nextChunk.source) // UUE; but not an image
+         );
+
+         IPFSAPI(
+            optsIPFS.host, optsIPFS.port
+         ).add(nextChunk.data, (err, resultIPFS) => {
+            if( err ) return doneChunk(err);
+            if( !resultIPFS ) return doneChunk(new Error(
+               'Error putting an encoded UUE image to IPFS.'
+            ));
+            if(!( Array.isArray(resultIPFS) )) return doneChunk(new Error(
+               'Not an Array received (putting an encoded UUE image to IPFS).'
+            ));
+            if( resultIPFS.length !== 1 ) return doneChunk(new Error(
+               'Weird array received (putting an encoded UUE image to IPFS).'
+            ));
+            var hashIPFS = resultIPFS[0].Hash;
+            doneChunk(null, [
+               '[![(',
+               nextChunk.name.replace(/]/g, '\\]'),
+               ')\n](fs:/ipfs/',
+               hashIPFS,
+               ')\n](fs:/ipfs/',
+               hashIPFS,
+               ')'
+            ].join(''));
+         });
+      },
+      (err, resultChunks) => {
+         if( err ) return callback(err);
+
+         callback(null, resultChunks.join(''));
+      }
+   );
+};
+
+module.exports = (options, callback) => {
+   findErrorsInOptions(options, (err, opts) => {
       if( err ) return callback(err);
 
       // Access Fidonet mail:
@@ -48,19 +121,19 @@ module.exports = function(options, callback){
          title: opts.area,
          author: 'Fidonet authors of ' + opts.area,
          description: opts.area + ' area (Fidonet)',
-         generator: 'Fido2RSS ' + thisver,
+         generator: 'Fido2RSS ' + require('./package.json').version,
          site_url: 'area://' + opts.area
       });
 
       var mailCounter = 0;
-      var renderNextItem = function(){
+      var renderNextItem = () => {
          var nextItemNum = fidomail.size() - mailCounter;
          if( nextItemNum < 1 || mailCounter >= opts.msg ){
             // Finish:
             callback(null, feed.xml());
          } else {
             // Render one more mail item:
-            fidomail.readHeader(nextItemNum, function(err, header){
+            fidomail.readHeader(nextItemNum, (err, header) => {
                if( err ) return callback(err);
 
                var decoded = fidomail.decodeHeader(header);
@@ -112,7 +185,7 @@ module.exports = function(options, callback){
                .millisecond(0)
                .format('ddd, D MMM YY HH:mm:ss ZZ');
 
-               fidomail.decodeMessage(header, function(err, msgText){
+               fidomail.decodeMessage(header, (err, msgText) => {
                   if( err ) return callback(err);
 
                   var FidoHTMLOptions = {
@@ -134,17 +207,21 @@ module.exports = function(options, callback){
                      ];
                   }
 
-                  feed.item({
-                     'title': fiunis.decode(decoded.subj) || '(no title)',
-                     'description': FidoHTML(
-                        FidoHTMLOptions
-                     ).fromText(msgText),
-                     'url': itemURLPrefix + itemURL,
-                     'author': decoded.from,
-                     'date': itemDateString
+                  messageImgUUE2IPFS(msgText, opts.IPFS, (err, msgIPFS) => {
+                     if( err ) return callback(err);
+
+                     feed.item({
+                        'title': fiunis.decode(decoded.subj) || '(no title)',
+                        'description': FidoHTML(
+                           FidoHTMLOptions
+                        ).fromText(msgIPFS),
+                        'url': itemURLPrefix + itemURL,
+                        'author': decoded.from,
+                        'date': itemDateString
+                     });
+                     mailCounter++;
+                     setImmediate(renderNextItem);
                   });
-                  mailCounter++;
-                  setImmediate(renderNextItem);
                });
             });
          }
@@ -154,13 +231,13 @@ module.exports = function(options, callback){
          typeof opts.type === 'string' &&
          opts.type.toLowerCase() === 'squish'
       ){
-         fidomail.readSQI(function(err){
+         fidomail.readSQI(err => {
             if( err ) return callback(err);
 
             setImmediate(renderNextItem);
          });
       } else {
-         fidomail.readJDX(function(err){
+         fidomail.readJDX(err => {
             if( err ) return callback(err);
 
             setImmediate(renderNextItem);
