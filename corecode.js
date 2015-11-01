@@ -85,11 +85,9 @@ var messageImgUUE2IPFS = (msgText, optsIPFS, callback) => {
             ));
             var hashIPFS = resultIPFS[0].Hash;
             doneChunk(null, [
-               '[![(',
+               '![(',
                nextChunk.name.replace(/]/g, '\\]'),
-               ')\n](fs:/ipfs/',
-               hashIPFS,
-               ')\n](fs:/ipfs/',
+               ')](fs:/ipfs/',
                hashIPFS,
                ')'
             ].join(''));

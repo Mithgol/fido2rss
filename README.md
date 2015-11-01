@@ -92,15 +92,17 @@ By default, 23.
 
 *(optional)*
 
-If this option is present, then UUE-encoded images are automatically decoded and put to [IPFS](https://ipfs.io/).
+If this option is present, then UUE-encoded images are automatically decoded and put to [IPFS](https://ipfs.io/). The given `host:port` is used to contact an IPFS daemon.
 
-Markdown-alike image declarations are inserted instead of UUE codes, and thus the RSS feed's size is reduced. This is important for RSS consumers that do not tolerate large entries. (For example, [LiveJournal](http://www.livejournal.com/) has some [small entry size](http://www.livejournal.com/support/faq/165.html).)
-
-The given `host:port` is used to contact an IPFS gateway.
-
-* If a mere `--IPFS` is given (i.e. without `host:port` part), the default gateway `--IPFS localhost:5001` is used (i.e. an IPFS daemon is expected to be running locally, alongside Fido2RSS).
+* If a mere `--IPFS` is given (i.e. without `host:port` part), the default address `--IPFS localhost:5001` is used (i.e. an IPFS daemon is expected to be running locally, alongside Fido2RSS).
 
 * If even `--IPFS` is missing, UUE-encoded images are left as they are (not IPFS-hosted at all), i.e. this option is off by default.
+
+IPFS-hosted images have the following advantages:
+
+* By default (without `--IPFS` option) UUE-decoded images use large [RFC2397-compliant](http://tools.ietf.org/html/rfc2397) Data URI, while IPFS-hosted images have much shorter URI (only ≈67 characters each) and the RSS feed's size is reduced. This is important for RSS consumers that do not tolerate large entries. (For example, [LiveJournal](http://www.livejournal.com/) has some [small entry size](http://www.livejournal.com/support/faq/165.html).)
+
+* End users (e.g. human readers) may install their own IPFS daemons and then use extensions (available [for Firefox](https://github.com/lidel/ipfs-firefox-addon/) and [for Chrome](https://github.com/dylanPowers/ipfs-chrome-extension/)) to browse IPFS locally. It has all the usual potential advantages of P2P (peer-to-peer) systems: local storage (cache), local traffic (peering), most files are still available even if their initial sources are offline or overcrowded, etc.
 
 ## Using Fido2RSS as a module
 
@@ -131,8 +133,8 @@ The following properties in the object of options are processed:
 
 * `options.IPFS` — this option is used to decide if UUE-encoded images are automatically decoded and put to [IPFS](https://ipfs.io/). This option may have one of the following values:
    * `undefined` — UUE-encoded images are not put to IPFS.
-   * `true` — UUE-encoded images are automatically decoded and put to IPFS. Markdown-alike image declarations are inserted instead of UUE codes. A local IPFS gateway (localhost:5001) is contacted.
-   * `'host:port'` — Same as above, but a remote IPFS gateway is contacted (the given `'host:port'` string is used as its address).
+   * `true` — UUE-encoded images are automatically decoded and put to IPFS. A local IPFS daemon (localhost:5001) is contacted.
+   * `'host:port'` — Same as above, but a remote IPFS daemon is contacted (the given `'host:port'` string is used as its address).
 
 * `options.areaPrefixURL` — the prefix to be added before `area://…` URLs that appear in RSS output. (For example, if `.areaPrefixURL` is `'https://example.org/fidonet?'`, then the URL `'https://example.org/fidonet?area://Test/'` will appear instead of original `'area://Test/'`.) Some WebBBS support is necessary on the server side (of the given server) for such URLs to be working.
    * This property also affects URLs of images and other files decoded from UUE codes. When the property is defined, these files are given with prefixed `area://…` URLs instead of [RFC2397-compliant](http://tools.ietf.org/html/rfc2397) `data:` URLs.

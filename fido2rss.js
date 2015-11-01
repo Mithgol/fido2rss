@@ -27,7 +27,7 @@ var opts = require('commander')
       'How many latest messages to publish in RSS.\n' +
       ' '.repeat(shi) + '(By default, 23 messages are published.)'
    ).option('--IPFS [host:port]',
-      'Use an IPFS gateway to store UUE-encoded images.\n' +
+      'Use an IPFS daemon to store UUE-encoded images in IPFS.\n' +
       ' '.repeat(shi) + '(If "--IPFS" is given without host:port,\n' +
       ' '.repeat(shi) + 'the default host:port is localhost:5001.\n' +
       ' '.repeat(shi) +
