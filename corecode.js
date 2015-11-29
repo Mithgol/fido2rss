@@ -191,7 +191,7 @@ module.exports = (options, callback) => {
                      URLPrefixes: {
                         '*': '', // default
                         fs: IPFSURL => IPFSURL.replace(
-                           /^fs:\/*/g, 'http://ipfs.io/'
+                           /^fs:\/*/g, 'https://ipfs.io/'
                         )
                      }
                   };
