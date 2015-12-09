@@ -192,6 +192,9 @@ module.exports = (options, callback) => {
                         '*': '', // default
                         fs: IPFSURL => IPFSURL.replace(
                            /^fs:\/*/g, 'https://ipfs.io/'
+                        ),
+                        ipfs: IPFSURL => IPFSURL.replace(
+                           /^ipfs:\/*/g, 'https://ipfs.io/'
                         )
                      }
                   };
