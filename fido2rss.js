@@ -45,7 +45,7 @@ if( typeof opts.out !== 'string' || opts.out.length < 1 ){
    process.exit(1);
 }
 
-// Lock file, prepare the unlocking function:
+// Lock file, prepare the `unlock`:
 try {
    if( typeof opts.lock === 'string' ){
       lock.lockSync(opts.lock);
@@ -55,7 +55,7 @@ try {
    throw e;
 }
 
-var unlock = function(){
+var unlock = () => {
    try {
       if( typeof opts.lock === 'string' ){
          lock.unlockSync(opts.lock);
@@ -66,7 +66,7 @@ var unlock = function(){
    }
 };
 
-fido2rss(opts, function(err, rssData){
+fido2rss(opts, (err, rssData) => {
    unlock();
    if( err ) throw err;
 
