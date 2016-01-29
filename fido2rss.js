@@ -33,8 +33,15 @@ var opts = require('commander')
       ' '.repeat(shi) +
       'If even "--IPFS" is missing, then UUE-encoded images\n' +
       ' '.repeat(shi) + 'are not stored in IPFS at all.)'
-   )
-   .parse(process.argv);
+   ).option('--IPFS-URL',
+      'Also uses an IPFS daemon to convert FGHI URLs\n' +
+      ' '.repeat(shi) + 'of Fidonet messages to IPFS URLs of web pages\n' +
+      ' '.repeat(shi) + 'that contain FGHI URLs.\n' +
+      ' '.repeat(shi) +
+      '(This is useful when raw FGHI URLs are not expected\n' +
+      ' '.repeat(shi) + 'by RSS readers and thus they become rejected\n' +
+      ' '.repeat(shi) + 'or misunderstood.)'
+   ).parse(process.argv);
 
 if( typeof opts.lock !== 'string' || opts.lock.length < 1 ){
    opts.lock = void 0;
