@@ -1,6 +1,7 @@
 var async = require('async');
 var FidoHTML = require('fidohtml');
 var fiunis = require('fiunis');
+var escape = require('lodash.escape');
 var IPFSAPI = require('ipfs-api');
 var JAM = require('fidonet-jam');
 var MIME = require('mime');
@@ -99,6 +100,34 @@ var messageImgUUE2IPFS = (msgText, optsIPFS, callback) => {
          callback(null, resultChunks.join(''));
       }
    );
+};
+
+var FGHIURL2IPFSURL = (FGHIURL, optsIPFS, optsIPFSURL, callback) => {
+   if( optsIPFS === null ) return callback(null, FGHIURL);
+   if(! optsIPFSURL ) return callback(null, FGHIURL);
+
+   var escapedURL = escape(FGHIURL);
+
+   var bufFGHIHTML = Buffer(`<html><head><meta charset="utf-8">${ ''
+      }<title>FGHI URL</title></head><body>FGHI URL: <a href="${
+      escapedURL}">${escapedURL}</a></body></html>`);
+
+   IPFSAPI(
+      optsIPFS.host, optsIPFS.port
+   ).add(bufFGHIHTML, (err, resultIPFS) => {
+      if( err ) return callback(err);
+      if( !resultIPFS ) return callback(new Error(
+         'Error putting a FGHI URL to IPFS.'
+      ));
+      if(!( Array.isArray(resultIPFS) )) return callback(new Error(
+         'Not an Array received while putting a FGHI URL to IPFS.'
+      ));
+      if( resultIPFS.length !== 1 ) return callback(new Error(
+         'Weird array received while putting a FGHI URL to IPFS.'
+      ));
+      var hashIPFS = resultIPFS[0].Hash;
+      callback(null, `https://ipfs.io/ipfs/${hashIPFS}`);
+   });
 };
 
 module.exports = (options, callback) => {
@@ -211,17 +240,28 @@ module.exports = (options, callback) => {
                   messageImgUUE2IPFS(msgText, opts.IPFS, (err, msgIPFS) => {
                      if( err ) return callback(err);
 
-                     feed.item({
-                        'title': fiunis.decode(decoded.subj) || '(no title)',
-                        'description': FidoHTML(
-                           FidoHTMLOptions
-                        ).fromText(msgIPFS),
-                        'url': itemURLPrefix + itemURL,
-                        'author': decoded.from,
-                        'date': itemDateString
-                     });
-                     mailCounter++;
-                     setImmediate(renderNextItem);
+                     FGHIURL2IPFSURL(
+                        itemURLPrefix + itemURL,
+                        opts.IPFS,
+                        opts.IPFSURL,
+                        (err, resultURL) => {
+                           if( err ) return callback(err);
+
+                           feed.item({
+                              'title': fiunis.decode(
+                                 decoded.subj
+                              ) || '(no title)',
+                              'description': FidoHTML(
+                                 FidoHTMLOptions
+                              ).fromText(msgIPFS),
+                              'url': resultURL,
+                              'author': decoded.from,
+                              'date': itemDateString
+                           });
+                           mailCounter++;
+                           setImmediate(renderNextItem);
+                        }
+                     );
                   });
                });
             });
