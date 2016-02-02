@@ -5,8 +5,9 @@
 ## Requirements
 
 * Fido2RSS is written in JavaScript and requires [Node.js](http://nodejs.org/) to run.
-   * Starting from v1.0.0, this module requires Node.js version 4.0.0 or newer.
-   * You may run older versions of this module in Node.js version 0.10.x or 0.12.x. These older versions, however, had to contain additional subdependencies as polyfills for missing ECMAScript 2015 (ES6) features which are now present in Node.js.
+   * Starting from v2.0.0, Fido2RSS requires Node.js version 4.2.2 or newer because the newer versions of IPFS API [require it.](https://github.com/ipfs/js-ipfs-api/pull/172)
+   * Starting from v1.0.0, Fido2RSS requires Node.js version 4.0.0 or newer because it is rewritten in ECMAScript 2015 (ES6).
+   * You may run older versions of Fido2RSS in Node.js version 0.10.x or 0.12.x. These older versions, however, had to contain additional subdependencies as polyfills for missing ECMAScript 2015 (ES6) features which are now present in Node.js.
 * Fido2RSS supports only a couple of Fidonet message base types: JAM [(Joaquim-Andrew-Mats)](http://groups.google.com/group/fido7.ru.ftn.develop/msg/e2f5486f80394418) and Squish.
 
 ## Installing Fido2RSS
