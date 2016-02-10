@@ -18,7 +18,7 @@
    "fidonet-jam": "~3.8.9",
    "fidonet-squish": "~0.0.35",
    "fiunis": "~2.1.2",
-   "ipfs-api": "~2.11.0",
+   "ipfs-api": "~2.13.0",
    "lockfile": "~1.0.0",
    "lodash.escape": "~3.2.0",
    "moment": "~2.11.2",
