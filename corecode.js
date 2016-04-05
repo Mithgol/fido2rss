@@ -130,6 +130,13 @@ var FGHIURL2IPFSURL = (FGHIURL, optsIPFS, optsIPFSURL, callback) => {
    });
 };
 
+var MSGID2URL = someMSGID => someMSGID.split(
+   /([A-Za-z01-9:/]+)/
+).map((nextChunk, IDX) => {
+   if( IDX % 2 === 0 ) return encodeURIComponent(nextChunk);
+   return nextChunk; // captured by the regular expression
+}).join('').replace( /%20/g, '+' );
+
 module.exports = (options, callback) => {
    findErrorsInOptions(options, (err, opts) => {
       if( err ) return callback(err);
@@ -169,10 +176,8 @@ module.exports = (options, callback) => {
 
                if( typeof decoded.msgid !== 'undefined' ){
                   itemURLFilters = [
-                     '?msgid=',
-                     encodeURIComponent(decoded.msgid).replace( /%20/g, '+' ),
-                     '&time=',
-                     decoded.origTime[0]
+                     '?msgid=', MSGID2URL(decoded.msgid),
+                     '&time=', decoded.origTime[0]
                   ].join('');
                } else {
                   itemURLFilters = [
