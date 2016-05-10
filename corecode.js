@@ -260,6 +260,7 @@ module.exports = (options, callback) => {
                                  FidoHTMLOptions
                               ).fromText(msgIPFS),
                               'url': resultURL,
+                              'guid': itemURL,
                               'author': decoded.from,
                               'date': itemDateString
                            });
