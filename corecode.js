@@ -84,7 +84,10 @@ var messageImgUUE2IPFS = (msgText, optsIPFS, callback) => {
             if( resultIPFS.length !== 1 ) return doneChunk(new Error(
                'Weird array received (putting an encoded UUE image to IPFS).'
             ));
-            var hashIPFS = resultIPFS[0].Hash;
+            var hashIPFS = resultIPFS[0].hash;
+            if( typeof hashIPFS === 'undefined' ) return doneChunk(new Error(
+               'Undefined hash (putting an encoded UUE image to IPFS).'
+            ));
             doneChunk(null, [
                '![(',
                nextChunk.name.replace(/]/g, '\\]'),
@@ -125,7 +128,10 @@ var FGHIURL2IPFSURL = (FGHIURL, optsIPFS, optsIPFSURL, callback) => {
       if( resultIPFS.length !== 1 ) return callback(new Error(
          'Weird array received while putting a FGHI URL to IPFS.'
       ));
-      var hashIPFS = resultIPFS[0].Hash;
+      var hashIPFS = resultIPFS[0].hash;
+      if( typeof hashIPFS === 'undefined' ) return callback(new Error(
+         'Undefined hash received while putting a FGHI URL to IPFS.'
+      ));
       callback(null, `https://ipfs.io/ipfs/${hashIPFS}`);
    });
 };
