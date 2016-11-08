@@ -62,12 +62,12 @@ var messageImgUUE2IPFS = (msgText, optsIPFS, callback) => {
          );
 
          var mimeType = MIME.lookup(nextChunk.name);
-         if([
+         if(!( [
             'image/jpeg',
             'image/png',
             'image/gif',
             'image/svg+xml'
-         ].indexOf(mimeType) < 0 ) return setImmediate(() =>
+         ].includes(mimeType) )) return setImmediate(() =>
             doneChunk(null, nextChunk.source) // UUE; but not an image
          );
 
