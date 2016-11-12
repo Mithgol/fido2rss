@@ -1,14 +1,12 @@
-var async = require('async');
 var FidoHTML = require('fidohtml');
 var fiunis = require('fiunis');
 var escape = require('lodash.escape');
 var IPFSAPI = require('ipfs-api');
 var JAM = require('fidonet-jam');
-var MIME = require('mime');
 var moment = require('moment');
 var RSS = require('rss');
 var Squish = require('fidonet-squish');
-var UUE = require('uue');
+var UUE2IPFS = require('uue2ipfs');
 
 // Error processing:
 var findErrorsInOptions = (opts, callback) => {
@@ -51,57 +49,23 @@ var findErrorsInOptions = (opts, callback) => {
    callback(null, opts);
 };
 
-var messageImgUUE2IPFS = (msgText, optsIPFS, callback) => {
-   if( optsIPFS === null ) return callback(null, msgText);
-   async.mapLimit(
-      UUE.split(msgText),
-      2, // concurrency of `.mapLimit`
-      (nextChunk, doneChunk) => {
-         if( typeof nextChunk === 'string' ) return setImmediate(() =>
-            doneChunk(null, nextChunk) // not an UUE
-         );
+var messageImgUUE2IPFS = (msgText, optsIPFS, doneImgUUE2IPFS) => {
+   if( optsIPFS === null ) return doneImgUUE2IPFS(null, msgText);
 
-         var mimeType = MIME.lookup(nextChunk.name);
-         if(!( [
-            'image/jpeg',
-            'image/png',
-            'image/gif',
-            'image/svg+xml'
-         ].includes(mimeType) )) return setImmediate(() =>
-            doneChunk(null, nextChunk.source) // UUE; but not an image
-         );
-
-         IPFSAPI(
-            optsIPFS.host, optsIPFS.port
-         ).add(nextChunk.data, (err, resultIPFS) => {
-            if( err ) return doneChunk(err);
-            if( !resultIPFS ) return doneChunk(new Error(
-               'Error putting an encoded UUE image to IPFS.'
-            ));
-            if(!( Array.isArray(resultIPFS) )) return doneChunk(new Error(
-               'Not an Array received (putting an encoded UUE image to IPFS).'
-            ));
-            if( resultIPFS.length !== 1 ) return doneChunk(new Error(
-               'Weird array received (putting an encoded UUE image to IPFS).'
-            ));
-            var hashIPFS = resultIPFS[0].hash;
-            if( typeof hashIPFS === 'undefined' ) return doneChunk(new Error(
-               'Undefined hash (putting an encoded UUE image to IPFS).'
-            ));
-            doneChunk(null, [
-               '![(',
-               nextChunk.name.replace(/]/g, '\\]'),
-               ')](fs:/ipfs/',
-               hashIPFS,
-               ')'
-            ].join(''));
-         });
+   UUE2IPFS.UUE2IPFS(
+      msgText,
+      (fileData, fileDone) => fileDone(null,
+         [
+            '![(',
+            fileData.name.replace(/]/g, '\\]'),
+            ')](fs:/ipfs/', fileData.hash, ')'
+         ].join('')
+      ),
+      {
+         API: IPFSAPI(optsIPFS.host, optsIPFS.port),
+         filterMIME: UUE2IPFS.imgMIME()
       },
-      (err, resultChunks) => {
-         if( err ) return callback(err);
-
-         callback(null, resultChunks.join(''));
-      }
+      doneImgUUE2IPFS
    );
 };
 
