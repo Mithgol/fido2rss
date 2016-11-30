@@ -1,4 +1,5 @@
 var FidoHTML = require('fidohtml');
+var FidoMail2IPFS = require('fidomail2ipfs');
 var fiunis = require('fiunis');
 var escape = require('lodash.escape');
 var IPFSAPI = require('ipfs-api');
