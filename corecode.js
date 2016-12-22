@@ -50,6 +50,38 @@ var findErrorsInOptions = (opts, callback) => {
    callback(null, opts);
 };
 
+var dirToHashIPFS = (IPFS, dirPath, dirName, hashName, cbErr) => {
+   if( hashCache[hashName] ) return cbErr(null); // already cached
+
+   IPFS.util.addFromFs(
+      dirPath,
+      { recursive: true },
+      (err, arrIPFS) => {
+         if( err ) return cbErr(err);
+         if(!( Array.isArray(arrIPFS) )) return cbErr(
+            new Error(`[${dirName}] ${errors.notArrDir}`)
+         );
+         var arrDirIPFS = arrIPFS.filter(
+            nextIPFS => (nextIPFS.path || '').endsWith(dirName)
+         );
+         if( arrDirIPFS.length < 1 ) return cbErr(
+            new Error(`[${dirName}] ${errors.notFoundDir}`)
+         );
+         var hashIPFS = arrDirIPFS[ arrDirIPFS.length - 1 ].hash;
+         // if the hash is fine, put to cache and quit
+         if( hashIPFS ){
+            hashCache[hashName] = hashIPFS;
+            return cbErr(null);
+         }
+         // otherwise invalidate cache
+         hashCache[hashName] = false;
+         return cbErr(
+            new Error(`[${dirName}] ${errors.undefinedDirHash}`)
+         );
+      }
+   );
+};
+
 var messageImgUUE2IPFS = (msgText, optsIPFS, doneImgUUE2IPFS) => {
    if( optsIPFS === null ) return doneImgUUE2IPFS(null, msgText);
 
