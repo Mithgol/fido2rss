@@ -175,4 +175,8 @@ After that you may run `npm test` (in the directory of Fido2RSS). Only the J
 
 ## License
 
-MIT License, see the `LICENSE` file.
+MIT License (see the `LICENSE` file), with the following exceptions:
+
+* The file `redirector/jquery.min.js` contains [jQuery](https://jquery.org/) under the terms of jQuery's [license](https://jquery.org/license/).
+
+* The file `redirector/jsload.gif` is generated on http://ajaxload.info/ where the terms of the [Do What The Fuck You Want To Public License](http://www.wtfpl.net/) are said to apply.
