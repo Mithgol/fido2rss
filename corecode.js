@@ -50,8 +50,15 @@ var findErrorsInOptions = (opts, callback) => {
    callback(null, opts);
 };
 
+var hashCache = { redirector: false };
 var dirToHashIPFS = (IPFS, dirPath, dirName, hashName, cbErr) => {
    if( hashCache[hashName] ) return cbErr(null); // already cached
+
+   var errors = {
+      notArrDir: 'Not an Array received putting a directory to IPFS.',
+      notFoundDir: 'Directory not found in an Array of content put to IPFS.',
+      undefinedDirHash: 'Undefined hash after putting a directory to IPFS.'
+   };
 
    IPFS.util.addFromFs(
       dirPath,
