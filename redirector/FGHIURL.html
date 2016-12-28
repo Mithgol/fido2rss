@@ -9,11 +9,15 @@ img { vertical-align: -7px; }
 <script src="jquery.min.js"></script>
 <script src="underscore-min.js"></script>
 <script>
-var query = location.search;
-if( query.charAt(0) === '?' ) query = query.slice(1);
-if( query.length > 0 ){
-   
-}
+$(function(){
+   var query = location.search;
+   if( query.charAt(0) === '?' ) query = query.slice(1);
+   if( query.length > 0 ){
+      $('body').html([
+         'FGHI URL: <a href="', _.escape(query), '">', _.escape(query), '</a>'
+      ].join(''));
+   } else $('body').html('URL NOT FOUND');
+});
 </script>
 </head>
 <body>
