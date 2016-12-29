@@ -12,6 +12,7 @@
    "url": "https://github.com/Mithgol/fido2rss.git"
 },
 "dependencies": {
+   "async": "~2.1.4",
    "commander": "~2.9.0",
    "fidohtml": "~1.3.0",
    "fidomail2ipfs": "~0.2.7",

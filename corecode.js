@@ -1,3 +1,4 @@
+var async = require('async');
 var FidoHTML = require('fidohtml');
 var FidoMail2IPFS = require('fidomail2ipfs');
 var fiunis = require('fiunis');
