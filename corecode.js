@@ -148,10 +148,9 @@ var MSGID2URL = someMSGID => someMSGID.split(
    return nextChunk; // captured by the regular expression
 }).join('').replace( /%20/g, '+' );
 
-module.exports = (options, callback) => {
-   findErrorsInOptions(options, (err, opts) => {
-      if( err ) return callback(err);
-
+module.exports = (options, globalCallback) => async.waterfall([
+   callback => findErrorsInOptions(options, callback),
+   (opts, callback) => {
       // Access Fidonet mail:
       var fidomail;
       if(
@@ -301,5 +300,5 @@ module.exports = (options, callback) => {
             setImmediate(renderNextItem);
          });
       }
-   });
-};
+   }
+], globalCallback);
