@@ -1,3 +1,4 @@
+var path = require('path');
 var async = require('async');
 var FidoHTML = require('fidohtml');
 var FidoMail2IPFS = require('fidomail2ipfs');
@@ -51,10 +52,7 @@ var findErrorsInOptions = (opts, callback) => {
    callback(null, opts);
 };
 
-var hashCache = { redirector: false };
-var dirToHashIPFS = (IPFS, dirPath, dirName, hashName, cbErr) => {
-   if( hashCache[hashName] ) return cbErr(null); // already cached
-
+var dirToHashIPFS = (IPFS, dirPath, dirName, cbErrHash) => { // (err, hash)
    var errors = {
       notArrDir: 'Not an Array received putting a directory to IPFS.',
       notFoundDir: 'Directory not found in an Array of content put to IPFS.',
@@ -65,25 +63,23 @@ var dirToHashIPFS = (IPFS, dirPath, dirName, hashName, cbErr) => {
       dirPath,
       { recursive: true },
       (err, arrIPFS) => {
-         if( err ) return cbErr(err);
-         if(!( Array.isArray(arrIPFS) )) return cbErr(
+         if( err ) return cbErrHash(err);
+         if(!( Array.isArray(arrIPFS) )) return cbErrHash(
             new Error(`[${dirName}] ${errors.notArrDir}`)
          );
          var arrDirIPFS = arrIPFS.filter(
             nextIPFS => (nextIPFS.path || '').endsWith(dirName)
          );
-         if( arrDirIPFS.length < 1 ) return cbErr(
+         if( arrDirIPFS.length < 1 ) return cbErrHash(
             new Error(`[${dirName}] ${errors.notFoundDir}`)
          );
          var hashIPFS = arrDirIPFS[ arrDirIPFS.length - 1 ].hash;
-         // if the hash is fine, put to cache and quit
-         if( hashIPFS ){
-            hashCache[hashName] = hashIPFS;
-            return cbErr(null);
-         }
-         // otherwise invalidate cache
-         hashCache[hashName] = false;
-         return cbErr(
+
+         // if the hash is fine, return it throught the callback
+         if( hashIPFS ) return cbErrHash(null, hashIPFS);
+
+         // otherwise an ultimate failure
+         return cbErrHash(
             new Error(`[${dirName}] ${errors.undefinedDirHash}`)
          );
       }
@@ -150,7 +146,16 @@ var MSGID2URL = someMSGID => someMSGID.split(
 
 module.exports = (options, globalCallback) => async.waterfall([
    callback => findErrorsInOptions(options, callback),
-   (opts, callback) => {
+   (opts, callback) => { // put `redirector/` to IPFS
+      if( opts.IPFS === null ) return callback(null, opts, null);
+
+      dirToHashIPFS(
+         IPFSAPI(opts.IPFS.host, opts.IPFS.port),
+         path.join(__dirname, 'redirector'), 'redirector',
+         (err, hashIPFS) => callback(err, opts, hashIPFS)
+      );
+   },
+   (opts, redirectorIPFS, callback) => {
       // Access Fidonet mail:
       var fidomail;
       if(

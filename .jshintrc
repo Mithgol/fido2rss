@@ -9,7 +9,7 @@
 "latedef": true,
 "noarg": true,
 "undef": true,
-"unused": "strict",
+"unused": true,
 "trailing": true,
 "maxlen": 78
 }
