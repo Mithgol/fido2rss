@@ -106,9 +106,11 @@ var messageImgUUE2IPFS = (msgText, optsIPFS, doneImgUUE2IPFS) => {
    );
 };
 
-var FGHIURL2IPFSURL = (FGHIURL, optsIPFS, optsIPFSURL, callback) => {
-   if( optsIPFS === null ) return callback(null, FGHIURL);
-   if(! optsIPFSURL ) return callback(null, FGHIURL);
+var FGHIURL2IPFSURL = (
+   prefixedURL, FGHIURL, optsIPFS, optsIPFSURL, callback
+) => {
+   if( optsIPFS === null ) return callback(null, prefixedURL);
+   if(! optsIPFSURL ) return callback(null, prefixedURL);
 
    var escapedURL = escape(FGHIURL);
 
@@ -146,8 +148,9 @@ var MSGID2URL = someMSGID => someMSGID.split(
 
 module.exports = (options, globalCallback) => async.waterfall([
    callback => findErrorsInOptions(options, callback),
-   (opts, callback) => { // put `redirector/` to IPFS
+   (opts, callback) => { // put `redirector/` to IPFS (only if necessary)
       if( opts.IPFS === null ) return callback(null, opts, null);
+      if(! opts.IPFSURL ) return callback(null, opts, null);
 
       dirToHashIPFS(
          IPFSAPI(opts.IPFS.host, opts.IPFS.port),
@@ -248,12 +251,19 @@ module.exports = (options, globalCallback) => async.waterfall([
                      }
                   };
                   var itemURLPrefix = '';
-                  if( typeof opts.areaPrefixURL !== 'undefined' ){
+                  // `redirectorIPFS` is here only if it is meant to be used
+                  if( redirectorIPFS !== null ){
+                     itemURLPrefix = `https://ipfs.io/ipfs/${redirectorIPFS
+                        }/FGHIURL.html?`;
+                     FidoHTMLOptions.URLPrefixes.area = itemURLPrefix;
+                     FidoHTMLOptions.fileURLParts = [
+                        itemURLPrefix, itemURLFilters
+                     ];
+                  } else if( typeof opts.areaPrefixURL !== 'undefined' ){
                      itemURLPrefix = opts.areaPrefixURL;
                      FidoHTMLOptions.URLPrefixes.area = opts.areaPrefixURL;
                      FidoHTMLOptions.fileURLParts = [
-                        opts.areaPrefixURL,
-                        itemURLFilters
+                        opts.areaPrefixURL, itemURLFilters
                      ];
                   }
 
@@ -262,6 +272,7 @@ module.exports = (options, globalCallback) => async.waterfall([
 
                      FGHIURL2IPFSURL(
                         itemURLPrefix + itemURL,
+                        itemURL,
                         opts.IPFS,
                         opts.IPFSURL,
                         (err, resultURL) => {
