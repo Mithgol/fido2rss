@@ -41,6 +41,9 @@ var opts = require('commander')
       '(This is useful when raw FGHI URLs are not expected\n' +
       ' '.repeat(shi) + 'by RSS readers and thus they become rejected\n' +
       ' '.repeat(shi) + 'or misunderstood.)'
+   ).option('--twitter [user]',
+      'A user of Twitter to whom the Fidonet messages are attributed.\n' +
+      ' '.repeat(shi) + '(By default, no attribution and no Twitter Cards.)'
    ).parse(process.argv);
 
 if( typeof opts.lock !== 'string' || opts.lock.length < 1 ){
