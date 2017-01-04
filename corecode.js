@@ -3,13 +3,15 @@ var async = require('async');
 var FidoHTML = require('fidohtml');
 var FidoMail2IPFS = require('fidomail2ipfs');
 var fiunis = require('fiunis');
-var escape = require('lodash.escape');
 var IPFSAPI = require('ipfs-api');
 var JAM = require('fidonet-jam');
 var moment = require('moment');
 var RSS = require('rss');
 var Squish = require('fidonet-squish');
 var UUE2IPFS = require('uue2ipfs');
+
+// inner setting (theoretically a future option):
+var csspxAvatarWidth = 140;
 
 // Error processing:
 var findErrorsInOptions = (opts, callback) => {
@@ -48,6 +50,8 @@ var findErrorsInOptions = (opts, callback) => {
          };
       }
    }
+
+   if( typeof opts.twitter !== 'string' ) opts.twitter = false;
 
    callback(null, opts);
 };
@@ -107,36 +111,53 @@ var messageImgUUE2IPFS = (msgText, optsIPFS, doneImgUUE2IPFS) => {
 };
 
 var FGHIURL2IPFSURL = (
-   prefixedURL, FGHIURL, optsIPFS, optsIPFSURL, callback
+   prefixedURL, FGHIURL,
+   opts, convertedText, echobase, header, decoded, gotIPFSURL
 ) => {
-   if( optsIPFS === null ) return callback(null, prefixedURL);
-   if(! optsIPFSURL ) return callback(null, prefixedURL);
+   if( opts.IPFS === null ) return gotIPFSURL(null, prefixedURL);
+   if(! opts.IPFSURL ) return gotIPFSURL(null, prefixedURL);
 
-   var escapedURL = escape(FGHIURL);
+   async.waterfall([
+      callback => echobase.getOrigAddr(
+         header,
+         (origErr, origAddr) => {
+            if( origErr ) return callback(origErr);
 
-   var bufFGHIHTML = Buffer(`<html><head><meta charset="utf-8">${ ''
-      }<title>FGHI URL</title></head><body>FGHI URL: <a href="${
-      escapedURL}">${escapedURL}</a></body></html>`);
+            var avatarsList = echobase.getAvatarsForHeader(
+               header, ['https', 'http'], {
+                  size: csspxAvatarWidth * 2, //retina pixels
+                  origAddr: origAddr
+            });
+            if( avatarsList.length < 1 ) avatarsList = [
+               'https://secure.gravatar.com/avatar/?f=y&d=mm&s=' +
+               ( csspxAvatarWidth * 2 ) //retina pixels
+            ];
 
-   IPFSAPI(
-      optsIPFS.host, optsIPFS.port
-   ).add(bufFGHIHTML, (err, resultIPFS) => {
-      if( err ) return callback(err);
-      if( !resultIPFS ) return callback(new Error(
-         'Error putting a FGHI URL to IPFS.'
-      ));
-      if(!( Array.isArray(resultIPFS) )) return callback(new Error(
-         'Not an Array received while putting a FGHI URL to IPFS.'
-      ));
-      if( resultIPFS.length !== 1 ) return callback(new Error(
-         'Weird array received while putting a FGHI URL to IPFS.'
-      ));
-      var hashIPFS = resultIPFS[0].hash;
-      if( typeof hashIPFS === 'undefined' ) return callback(new Error(
-         'Undefined hash received while putting a FGHI URL to IPFS.'
-      ));
-      callback(null, `https://ipfs.io/ipfs/${hashIPFS}`);
-   });
+            return callback(null, {
+               origAddr: origAddr,
+               avatarURL: avatarsList[0]
+            });
+         }
+      ),
+      (wrapped, callback) => FidoMail2IPFS(
+         {
+            server: opts.IPFS.host,
+            port: opts.IPFS.port,
+            messageText: convertedText,
+            avatarWidth: csspxAvatarWidth,
+            avatarURL: wrapped.avatarURL,
+            from: decoded.from || '',
+            origAddr: wrapped.origAddr,
+            to: decoded.to || '',
+            origTime: decoded.origTime,
+            procTime: decoded.procTime,
+            subj: decoded.subj ? fiunis.decode( decoded.subj ) : '',
+            URL: FGHIURL,
+            twitterUser: opts.twitter
+         },
+         callback
+      )
+   ], gotIPFSURL);
 };
 
 var MSGID2URL = someMSGID => someMSGID.split(
@@ -273,8 +294,11 @@ module.exports = (options, globalCallback) => async.waterfall([
                      FGHIURL2IPFSURL(
                         itemURLPrefix + itemURL,
                         itemURL,
-                        opts.IPFS,
-                        opts.IPFSURL,
+                        opts,
+                        msgIPFS,
+                        fidomail,
+                        header,
+                        decoded,
                         (err, resultURL) => {
                            if( err ) return callback(err);
 
