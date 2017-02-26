@@ -5,7 +5,7 @@
 ## Requirements
 
 * Fido2RSS is written in JavaScript and requires [Node.js](http://nodejs.org/) to run.
-   * Starting from v3.0.0, Fido2RSS requires Node.js version 6.8.1 or newer because it is rewritten in ECMAScript 2016 (ES7).
+   * Starting from v3.0.0, Fido2RSS requires Node.js version 6.0.0 or newer because it is rewritten in ECMAScript 2016 (ES7).
    * Starting from v2.0.0, Fido2RSS requires Node.js version 4.2.2 or newer because the newer versions of IPFS API [require it.](https://github.com/ipfs/js-ipfs-api/pull/172)
    * Starting from v1.0.0, Fido2RSS requires Node.js version 4.0.0 or newer because it is rewritten in ECMAScript 2015 (ES6).
    * You may run older versions of Fido2RSS (that precede v1.0.0) with older Node.js versions (0.10.x or 0.12.x). These older versions of FidoRSS, however, had to contain additional subdependencies as polyfills for missing ECMAScript 2015 (ES6) features which are now present in Node.js.
