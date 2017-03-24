@@ -19,7 +19,7 @@
    "fidonet-jam": "~3.8.20",
    "fidonet-squish": "~0.0.35",
    "fiunis": "~2.1.2",
-   "ipfs-api": "~12.1.0",
+   "ipfs-api": "~13.0.0",
    "lockfile": "~1.0.0",
    "moment": "~2.18.0",
    "rss": "~1.2.0",
