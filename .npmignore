@@ -36,3 +36,8 @@ npm-debug.log
 
 # Project-specific: RSS output
 *.rss
+
+# .npmignore should ignore tests and Git stuff
+test
+.gitignore
+.git
