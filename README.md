@@ -129,7 +129,7 @@ This option is designed as a workaround for RSS consumers that do not ex
 *(optional)*
 
 If this option and the previous two (`--IPFS` and `--IPFS-URL`) options are present, then Fido2RSS uses this option's value as a username of a [Twitter](https://twitter.com/)'s user that each of the processed Fidonet messages should be attributed to. When the message is stored in IPFS, a [Summary Card with Large Image](https://dev.twitter.com/cards/types/summary-large-image) will be generated for future references and stored in HTML5 representation's `<head>`, but only if an image for that card can be found in the Fidonet message's text. Notes:
-   * An image in the Fidonet message's text is expected to appear in the form of a Fidonet Rune markup (similar to a Markdown's inline image markup).
+   * An image in the Fidonet message's text is expected to appear in the form of a [Fidonet rune](https://github.com/Mithgol/node-fidonet-fidohtml/blob/master/runes.txt) (similar to a Markdown's inline image markup).
    * If several images are present in the message, only the first image is used in the card.
    * Twitter may decide to ignore the card if it feels that the image is too small (less than 280×150 pixels) or too large (more than 1 megabyte); compose your Fidonet messages accordingly and sometimes check the related [Twitter Card docs](https://dev.twitter.com/cards/types/summary-large-image) to see if these expected values change in the future.
 
