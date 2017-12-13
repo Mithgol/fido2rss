@@ -2,7 +2,7 @@
 "name": "fido2rss",
 "bin": "./fido2rss.js",
 "main": "corecode.js",
-"version": "3.1.19",
+"version": "3.1.20",
 "description": "Makes RSS feeds out of Fidonet echomail areas.",
 "keywords": ["Fidonet", "Fido", "RSS"],
 "author": { "name": "Mithgol the Webmaster" },
@@ -21,7 +21,7 @@
    "fiunis": "~3.0.0",
    "ipfs-api": "~17.2.0",
    "lockfile": "~1.0.0",
-   "moment": "~2.18.0",
+   "moment": "~2.19.4",
    "rss": "~1.2.0",
    "uue2ipfs": "~0.1.8"
 },
