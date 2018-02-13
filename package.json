@@ -13,7 +13,7 @@
 },
 "dependencies": {
    "async": "~2.6.0",
-   "commander": "~2.12.1",
+   "commander": "~2.14.1",
    "fidohtml": "~2.2.0",
    "fidomail2ipfs": "~0.3.27",
    "fidonet-jam": "~4.0.4",
